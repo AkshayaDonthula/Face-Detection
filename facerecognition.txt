@@ -1,0 +1,40 @@
+import cv2
+import os
+
+# Load pre-trained face detector from OpenCV
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
+def detect_faces(image_path):
+    # Check if the image file exists
+    if not os.path.exists(image_path):
+        print(f"Error: The file {image_path} does not exist.")
+        return
+
+    # Read the image
+    img = cv2.imread(image_path)
+
+    # Check if the image was loaded successfully
+    if img is None:
+        print("Error: Could not load image.")
+        return
+
+    # Convert the image to grayscale
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    # Detect faces
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+
+    # Draw rectangle around the faces
+    for (x, y, w, h) in faces:
+        cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
+
+    # Display the output
+    cv2.imshow('Face Recognition', img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+# Test the function with an image path
+
+image_path = r'C:\Users\donth\OneDrive\Desktop\OIP.jpeg'  # Ensure the path is correct and properly formatted
+detect_faces(image_path)
+
